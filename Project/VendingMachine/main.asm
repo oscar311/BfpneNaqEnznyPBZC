@@ -1,6 +1,5 @@
 
-.equ INTS_PER_MS = 8		; time per interrupt = (1/(16E6)) * (2^8 - 1) * 8 <- pre scaler = 127.5 us
-							; number of interrupts per second = (1E-3) / (127.5)E-6 = 7.843 ~ 8
+
 				
 .def inStart = r5
 .def inSelect = r6
@@ -45,18 +44,6 @@ DEFAULT:  reti          ; no service
 .include "modules/keypad.asm"
 
 RESET: 
-	ldi r24, 4
-	ldi temp1, 2
-	set_element r24,Inventory, temp1
-	ldi r24, 6
-	ldi temp1, 9
-	set_element r24,Inventory, temp1
-	clr temp1
-	ldi r24, 4
-	get_element r24,Inventory, temp1
-	ldi r24, 6
-	get_element r24,Inventory, temp1
-
 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
@@ -137,13 +124,27 @@ RESET:
     sts TIMSK0, temp        ; T/C0 interrupt enable
 	sei
 
+
 main:
+
+
 	do_lcd_command 0b00000001 		; clear display
     do_lcd_command 0b00000110 		; increment, no display shift
     do_lcd_command 0b00001110 		; Cursor on, bar, no blink
 	rjmp init_loop
+	ser temp
+    out PORTC, temp
+	mov temp, inSelect
+	cpi temp, 1
+	brne end
 	
 
+	do_lcd_command 0b00000001 		; clear display
+    do_lcd_command 0b00000110 		; increment, no display shift
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
+	
+end:
+	rjmp end
 
 
 	

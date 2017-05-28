@@ -8,15 +8,19 @@
     st Y, temp
 .endmacro
 
-.macro checkInStart
+.macro check_in_start
+    push temp
     in temp, SREG
     push temp
+
     mov temp, inStart
     cpi temp, 1                 ; checking whether the start screen is open
-    brne end                    ; not in start screen, so keep going
+    brne end 
+                                ; not in start screen, so keep going
     pop temp
     out SREG, temp
     pop temp
+
     clr inStart
     set_reg inSelect
     rjmp main            ; if it is, tell main to change to Select screen
@@ -32,6 +36,21 @@
     rcall lcd_command
     rcall lcd_wait
 .endmacro
+
+/*
+Usage:
+    ldi r24, 4
+    ldi temp1, 2
+    set_element r24,Inventory, temp1
+    ldi r24, 6
+    ldi temp1, 9
+    set_element r24,Inventory, temp1
+    clr temp1
+    ldi r24, 4
+    get_element r24,Inventory, temp1
+    ldi r24, 6
+    get_element r24,Inventory, temp1
+*/
 
 /*
     @0 - register containing desired index (not temp!)

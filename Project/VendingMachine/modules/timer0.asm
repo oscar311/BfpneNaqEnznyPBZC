@@ -1,3 +1,6 @@
+.equ INTS_PER_MS = 8        ; time per interrupt = (1/(16E6)) * (2^8 - 1) * 8 <- pre scaler = 127.5 us
+                            ; number of interrupts per second = (1E-3) / (127.5)E-6 = 7.843 ~ 8
+
 Timer0OVF: ; interrupt subroutine to Timer0
     push temp
     in temp, SREG
@@ -12,13 +15,16 @@ Timer0OVF: ; interrupt subroutine to Timer0
     ;counting 3 seconds until the Start screen can be cleared
         lds r26, DisplayCounter
         lds r27, DisplayCounter+1
-        adiw r26:r27, 1
+        adiw r27:r26, 1
 
         cpi r26, low(3000 * INTS_PER_MS)        ; 3 second check
+        
+        ser temp
+        out PORTC, temp
         brne skip
 
         clear DisplayCounter
-        checkInStart                                                                       
+        check_in_start                                                                       
 
 
 skip:
