@@ -34,6 +34,7 @@ Cost:
 .org OVF0addr
    jmp Timer0OVF        ; Jump to the interrupt handler for timer 0
 
+
 jmp DEFAULT          ; default service for all other interrupts.
 DEFAULT:  reti          ; no service
 
@@ -44,7 +45,6 @@ DEFAULT:  reti          ; no service
 .include "modules/keypad.asm"
 
 RESET: 
-
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
 	ldi temp1, low(RAMEND)
@@ -54,15 +54,10 @@ RESET:
 	ser temp1 					; set Port C as output - reset all bits to 0 (ser = set all bits in register)
 	out DDRC, temp1 
 
-	ldi temp, high(RAMEND)         ; Initialize stack pointer
-    out SPH, temp
-    ldi temp, low(RAMEND)
-    out SPL, temp
-
     ldi temp, PORTLDIR
     sts DDRL, temp            		; sets lower bits as input and upper as output
 
-    set_reg r16
+    ser r16
     out DDRF, r16
     out DDRA, r16
     clr r16
@@ -116,7 +111,9 @@ RESET:
 	do_lcd_data_i 'n'
 	do_lcd_data_i 'e'
 
-	ldi temp, 0b00000000
+	clear DisplayCounter
+
+    ldi temp, 0b00000000
     out TCCR0A, temp
     ldi temp, 0b00000010
     out TCCR0B, temp        ; Prescaling value=8
@@ -124,29 +121,37 @@ RESET:
     sts TIMSK0, temp        ; T/C0 interrupt enable
 	sei
 
+	
+	/*do_lcd_command 0b00000001 		; clear display
+    do_lcd_command 0b00000110 		; increment, no display shift
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
+	*/
+
+	rjmp main
 
 main:
+	mov temp, inStart
+	cpi temp, 0xFF
+	breq end
 
-
-	do_lcd_command 0b00000001 		; clear display
-    do_lcd_command 0b00000110 		; increment, no display shift
-    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
-	rjmp init_loop
-	ser temp
-    out PORTC, temp
 	mov temp, inSelect
-	cpi temp, 1
-	brne end
-	
+	cpi temp, 0xFF
+	brne selectScreen
 
 	do_lcd_command 0b00000001 		; clear display
     do_lcd_command 0b00000110 		; increment, no display shift
-    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink*/
+	//rjmp 
+	
 	
 end:
-	rjmp end
+	rjmp init_loop
 
+selectScreen:
 
+	out PORTC, temp
+
+	rjmp selectScreen
 	
 
 EXT_INT2:
