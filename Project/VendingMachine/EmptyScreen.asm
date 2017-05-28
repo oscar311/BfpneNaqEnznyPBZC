@@ -3,9 +3,26 @@
 ;	
 ; Empty Screen
 
+emptyScreen:
 
-.include "m2560def.inc"
+    do_lcd_command 0b00000001 		; clear display
+	
+	do_lcd_data_i 'O'
+	do_lcd_data_i 'u'
+	do_lcd_data_i 't'
+	do_lcd_data_i ' '
+	do_lcd_data_i ' '
+	do_lcd_data_i 'O'
+	do_lcd_data_i 'f'
+	do_lcd_data_i ' '
+	do_lcd_data_i 'S'
+	do_lcd_data_i 't'
+	do_lcd_data_i 'o'
+	do_lcd_data_i 'c'
+	do_lcd_data_i 'k'	
+	do_lcd_data_i ' '
 
-start:
+	do_lcd_command 0b11000000	; break to the next line	
+	do_lcd_digits row ; row = item id
+ret 
 
-	rjmp start
