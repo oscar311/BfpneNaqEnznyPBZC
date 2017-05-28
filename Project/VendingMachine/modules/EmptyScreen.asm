@@ -24,6 +24,6 @@ emptyScreen:
 	do_lcd_data_i ' ' 
 
   	do_lcd_command 0b11000000  ; break to the next line   
-  	print_digits row ; row = item id 
+  	//do_lcd_digits row ; row = item id 
   	
 	ret
