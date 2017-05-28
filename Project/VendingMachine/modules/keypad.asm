@@ -23,7 +23,9 @@ delay:
     cpi temp, 0xF               ; Check if any of the rows is low (0xF = 0000 1111)
     breq nextCol                ; all rows are high
 
-    checkInStart                ; if any button is pressed, change (if applicable) startScreen to selectScreen
+
+    
+    check_in_start                ; if any button is pressed, change (if applicable) startScreen to selectScreen
 
     ldi rmask, INITROWMASK      ;Initialize for row check
     clr row
