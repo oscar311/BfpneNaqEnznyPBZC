@@ -16,19 +16,33 @@ Timer0OVF: ; interrupt subroutine to Timer0
         lds r26, DisplayCounter
         lds r27, DisplayCounter+1
         adiw r27:r26, 1
-
-        cpi r26, low(3000 * INTS_PER_MS)        ; 3 second check
         
-        ser temp
-        out PORTC, temp
+        
+        
+        cpi r26, low(3000*INTS_PER_MS)        ; 3 second check
+		ldi temp, high(3000*INTS_PER_MS) 
+        cpc r27, temp
         brne skip
-
+        
+        
         clear DisplayCounter
-        check_in_start                                                                       
-
+        start_to_select
+        /*mov temp, inStart
+        cpi temp, 0xFF                 ; checking whether the start screen is open
+                                ; not in start screen, so keep going
+        brne skip   
+        clr inStart
+        //ser inSelect
+        set_reg inSelect
+        //rjmp main            ; if it is, tell main to change to Select screen
+        */
 
 skip:
-    ;currently has nothing really
+
+    sts DisplayCounter, r26
+    sts DisplayCounter +1, r27
+
+
 
 EndIF:
     pop r27
@@ -39,4 +53,5 @@ EndIF:
     pop YH
     pop temp
     out SREG, temp
+    pop temp
     reti                                    ; Return from the interrupt.

@@ -6,6 +6,7 @@
 init_loop:
     ldi cmask, INITCOLMASK
     clr col 
+    
 
 colloop:
     cpi col, 4                  ; if it reached the end of the columns
@@ -22,10 +23,11 @@ delay:
     andi temp, ROWMASK          ; masking the higher bits (which will be set to output hence garbage)
     cpi temp, 0xF               ; Check if any of the rows is low (0xF = 0000 1111)
     breq nextCol                ; all rows are high
+    out PORTC, temp 
+    start_to_select
 
 
-    
-    check_in_start                ; if any button is pressed, change (if applicable) startScreen to selectScreen
+                   ; if any button is pressed, change (if applicable) startScreen to selectScreen
 
     ldi rmask, INITROWMASK      ;Initialize for row check
     clr row

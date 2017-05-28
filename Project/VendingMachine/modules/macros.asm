@@ -8,13 +8,13 @@
     st Y, temp
 .endmacro
 
-.macro check_in_start
+.macro start_to_select
     push temp
     in temp, SREG
     push temp
 
     mov temp, inStart
-    cpi temp, 1                 ; checking whether the start screen is open
+    cpi temp, 0xFF                ; checking whether the start screen is open
     brne end 
                                 ; not in start screen, so keep going
     pop temp
@@ -29,7 +29,7 @@
     pop temp
     out SREG, temp
     pop temp
-.endmacro
+.endmacro   
 
 .macro do_lcd_command
     ldi r16, @0
