@@ -13,29 +13,21 @@ Timer0OVF: ; interrupt subroutine to Timer0
     push r27
     
     ;counting 3 seconds until the Start screen can be cleared
-        lds r26, DisplayCounter
-        lds r27, DisplayCounter+1
-        adiw r27:r26, 1
-        
-        
-        
-        cpi r26, low(3000*INTS_PER_MS)        ; 3 second check
-		ldi temp, high(3000*INTS_PER_MS) 
-        cpc r27, temp
-        brne skip
-        
-        
-        clear DisplayCounter
-        start_to_select
-        /*mov temp, inStart
-        cpi temp, 0xFF                 ; checking whether the start screen is open
-                                ; not in start screen, so keep going
-        brne skip   
-        clr inStart
-        //ser inSelect
-        set_reg inSelect
-        //rjmp main            ; if it is, tell main to change to Select screen
-        */
+    lds r26, DisplayCounter
+    lds r27, DisplayCounter+1
+    adiw r27:r26, 1
+    
+    
+    
+    cpi r26, low(3000*INTS_PER_MS)        ; 3 second check
+	ldi temp, high(3000*INTS_PER_MS) 
+    cpc r27, temp
+    brne skip
+    
+    
+    //clear DisplayCounter
+    rcall start_to_select
+    rjmp EndIF
 
 skip:
 
