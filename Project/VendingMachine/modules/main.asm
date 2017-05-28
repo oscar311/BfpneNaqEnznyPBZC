@@ -1,10 +1,8 @@
-.equ inStart =  1
-.equ inSelect = 2
-.equ inCoin = 3
-.equ inEmpty = 4
 
-.def currFlag = r5
-.def oldFlag = r6
+
+				
+.def inStart = r5
+.def inSelect = r6
 
 .def row = r16
 .def col = r17
@@ -14,6 +12,7 @@
 .def temp1 = r21
 
 								;we have up to and including r25
+
 
 .dseg 
 TempCounter:
@@ -30,6 +29,8 @@ Cost:
    jmp RESET
    jmp DEFAULT          ; No handling for IRQ0.
    jmp DEFAULT          ; No handling for IRQ1.
+.org INT2addr
+    jmp EXT_INT2
 .org OVF0addr
    jmp Timer0OVF        ; Jump to the interrupt handler for timer 0
 
@@ -42,7 +43,6 @@ DEFAULT:  reti          ; no service
 .include "modules/lcd.asm"
 .include "modules/timer0.asm"
 .include "modules/keypad.asm"
-
 
 RESET: 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
@@ -78,8 +78,39 @@ RESET:
     do_lcd_command 0b00000110 		; increment, no display shift
     do_lcd_command 0b00001110 		; Cursor on, bar, no blink
 
-	set_reg currFlag, inStart
-	clr oldFlag
+	set_reg inStart
+	do_lcd_data_i '2'
+	do_lcd_data_i '1'
+	do_lcd_data_i '2'
+	do_lcd_data_i '1'
+	do_lcd_data_i ' '
+	do_lcd_data_i '1'
+	do_lcd_data_i '7'
+	do_lcd_data_i 's'
+	do_lcd_data_i '1'
+	do_lcd_data_i ' '
+	do_lcd_data_i ' '
+	do_lcd_data_i ' '					; not sure how many spaces needed
+	do_lcd_data_i 'B'	
+	do_lcd_data_i '2'
+
+	do_lcd_command 0b11000000	; break to the next line	
+	do_lcd_data_i 'V'
+	do_lcd_data_i 'e'
+	do_lcd_data_i 'n'
+	do_lcd_data_i 'd'
+	do_lcd_data_i 'i'
+	do_lcd_data_i 'n'
+	do_lcd_data_i 'g'
+	do_lcd_data_i ' '
+	do_lcd_data_i 'M'
+	do_lcd_data_i 'a'
+	do_lcd_data_i 'c'
+	do_lcd_data_i 'h'	
+	do_lcd_data_i 'i'	
+	do_lcd_data_i 'n'
+	do_lcd_data_i 'e'
+
 	clear DisplayCounter
 
     ldi temp, 0b00000000
@@ -90,64 +121,42 @@ RESET:
     sts TIMSK0, temp        ; T/C0 interrupt enable
 	sei
 
+	
+	/*do_lcd_command 0b00000001 		; clear display
+    do_lcd_command 0b00000110 		; increment, no display shift
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
+	*/
 
 	rjmp main
 
 main:
-	cp currFlag, oldFlag
-	breq end				; no screen update needed 
-	mov oldFlag, currFlag	; the screen needs updating
+	mov temp, inStart
+	cpi temp, 0xFF
+	breq end
 
-	mov temp, currFlag
+	mov temp, inSelect
+	cpi temp, 0xFF
+	brne selectScreen
 
-	cpi temp, inStart		; checking which screen to update to
-	brne checkSelect
-	rcall startScreen
-checkSelect:
-	cpi temp, inSelect
-	brne end
-	rcall selectScreen		; TODO tell Oscar to add stuff to it 
-checkEmpty:
-	cpi temp, inEmpty
-	rcall emptyScreen
-
+	do_lcd_command 0b00000001 		; clear display
+    do_lcd_command 0b00000110 		; increment, no display shift
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink*/
+	//rjmp 
 	
 	
 end:
 	rjmp init_loop
 
-start_to_select:
-    push temp
-    in temp, SREG
-    push temp
+selectScreen:
 
-    mov temp, currFlag
-    cpi temp, inStart              ; checking whether the start screen is open
-    brne endF 
-                                ; not in start screen, so keep going
-    /*pop temp
-    out SREG, temp
-    pop temp*/
+	out PORTC, temp
 
-    
-    set_reg currFlag, inSelect
-    //rjmp main            ; if it is, tell main to change to Select screen
-
-    endF:
-    pop temp
-    out SREG, temp
-    pop temp
-    ret 
-
-.include "modules/AdminScreen.asm"
-.include "modules/CoinReturn.asm"
-.include "modules/DeliverScreen.asm"
-.include "modules/EmptyScreen.asm"
-.include "modules/SelectScreen.asm"
-.include "modules/StartScreen.asm"
-
+	rjmp selectScreen
 	
 
+EXT_INT2:
+
+		reti
 
 
 

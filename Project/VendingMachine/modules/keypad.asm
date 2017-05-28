@@ -10,7 +10,9 @@ init_loop:
 
 colloop:
     cpi col, 4                  ; if it reached the end of the columns
-    breq init_loop              ; restart whole loop again
+    brne cont                   
+    rjmp main   
+    cont:
     sts PORTL, cmask            ; send logic low to certain column to read by row port
 
     ldi temp, 0xFF   
@@ -23,10 +25,11 @@ delay:
     andi temp, ROWMASK          ; masking the higher bits (which will be set to output hence garbage)
     cpi temp, 0xF               ; Check if any of the rows is low (0xF = 0000 1111)
     breq nextCol                ; all rows are high
-    out PORTC, temp
+    out PORTC, temp 
+    rcall start_to_select
 
-    start_to_select     ; if any button is pressed, change (if applicable) startScreen to selectScreen
-               
+
+                   ; if any button is pressed, change (if applicable) startScreen to selectScreen
 
     ldi rmask, INITROWMASK      ;Initialize for row check
     clr row
@@ -56,22 +59,18 @@ convert:
     cpi col, 1                  
     breq zero                   ; row == 3 & col == 1, then the 0 has been pressed
 
-    
-
     isNumber:                   ; else we convert the binary to an ASCII value
-
+    mov temp, row
     lsl temp                    ; multiply by 2
     add temp, row               ; multiply 3
     add temp, col
     subi temp, -1               ; temp now contains the actual number
-
-    mov row, temp      ; result is moved into row
-    // now check 
-    rcall select_screen  ; result = inventory item id
+    rjmp main
+    
 
 zero:
     clr temp
-                  ; add_to_num adds temp (which has current digit) to current number
+    rjmp main              ; add_to_num adds temp (which has current digit) to current number
 
 letters:
     cpi row, 0                  ; if its an A
@@ -82,6 +81,7 @@ letters:
     breq cButton
     cpi row, 3                  ; if its a D
     breq dButton
+    rjmp main
     
 aButton:
 
@@ -90,7 +90,7 @@ bButton:
 cButton:
     
 dButton: 
-
+rjmp main
 resetButton:
 
 write_out:
