@@ -23,11 +23,10 @@ delay:
     andi temp, ROWMASK          ; masking the higher bits (which will be set to output hence garbage)
     cpi temp, 0xF               ; Check if any of the rows is low (0xF = 0000 1111)
     breq nextCol                ; all rows are high
-    out PORTC, temp 
-    start_to_select
+    out PORTC, temp
 
-
-                   ; if any button is pressed, change (if applicable) startScreen to selectScreen
+    start_to_select     ; if any button is pressed, change (if applicable) startScreen to selectScreen
+               
 
     ldi rmask, INITROWMASK      ;Initialize for row check
     clr row
@@ -57,13 +56,18 @@ convert:
     cpi col, 1                  
     breq zero                   ; row == 3 & col == 1, then the 0 has been pressed
 
+    
+
     isNumber:                   ; else we convert the binary to an ASCII value
-    mov temp, row
+
     lsl temp                    ; multiply by 2
     add temp, row               ; multiply 3
     add temp, col
     subi temp, -1               ; temp now contains the actual number
-    
+
+    mov row, temp      ; result is moved into row
+    // now check 
+    rcall select_screen  ; result = inventory item id
 
 zero:
     clr temp

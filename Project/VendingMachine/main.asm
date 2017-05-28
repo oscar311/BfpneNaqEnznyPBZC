@@ -1,8 +1,22 @@
+; COMP2121
+; Project - Vending Machine
+;	
+; Main
+
+.include "m2560def.inc"
+
+.include "modules/macros.asm"
+.include "modules/lcd.asm"
+.include "modules/timer0.asm"
+.include "modules/keypad.asm"
+
+.include "SelectScreen.asm"	
+.include "EmptyScreen.asm"			
 
 
-				
 .def inStart = r5
 .def inSelect = r6
+.def inCoin = r7
 
 .def row = r16
 .def col = r17
@@ -11,19 +25,18 @@
 .def temp = r20
 .def temp1 = r21
 
-								;we have up to and including r25
-
-
+; data memory
 .dseg 
-TempCounter:
-    .byte 2             ; Temporary counter. Counts milliseconds
-DisplayCounter:
-    .byte 2             ; counts number of milliseconds for displays.
-Inventory:
-	.byte 9
-Cost:
-	.byte 9	
+	TempCounter:
+    	.byte 2             ; Temporary counter. Counts milliseconds
+	DisplayCounter:
+    	.byte 2             ; counts number of milliseconds for displays.
+	Inventory:
+		.byte 9
+	Cost:
+		.byte 9	
 
+; program memory
 .cseg
 .org 0x0000
    jmp RESET
@@ -34,15 +47,8 @@ Cost:
 .org OVF0addr
    jmp Timer0OVF        ; Jump to the interrupt handler for timer 0
 
-
-jmp DEFAULT          ; default service for all other interrupts.
-DEFAULT:  reti          ; no service
-
-.include "m2560def.inc"
-.include "modules/macros.asm"
-.include "modules/lcd.asm"
-.include "modules/timer0.asm"
-.include "modules/keypad.asm"
+DEFAULT:  
+	reti          ; no service
 
 RESET: 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
@@ -78,7 +84,18 @@ RESET:
     do_lcd_command 0b00000110 		; increment, no display shift
     do_lcd_command 0b00001110 		; Cursor on, bar, no blink
 
+    ldi temp, 0b00000000	; timer setup
+    out TCCR0A, temp
+    ldi temp, 0b00000010
+    out TCCR0B, temp        ; Prescaling value=8
+    ldi temp, 1<<TOIE0      ; = 128 microseconds
+    sts TIMSK0, temp        ; T/C0 interrupt enable
+	sei
+
+
+start:
 	set_reg inStart
+
 	do_lcd_data_i '2'
 	do_lcd_data_i '1'
 	do_lcd_data_i '2'
@@ -90,7 +107,7 @@ RESET:
 	do_lcd_data_i '1'
 	do_lcd_data_i ' '
 	do_lcd_data_i ' '
-	do_lcd_data_i ' '					; not sure how many spaces needed
+	do_lcd_data_i ' '
 	do_lcd_data_i 'B'	
 	do_lcd_data_i '2'
 
@@ -113,46 +130,25 @@ RESET:
 
 	clear DisplayCounter
 
-    ldi temp, 0b00000000
-    out TCCR0A, temp
-    ldi temp, 0b00000010
-    out TCCR0B, temp        ; Prescaling value=8
-    ldi temp, 1<<TOIE0      ; = 128 microseconds
-    sts TIMSK0, temp        ; T/C0 interrupt enable
-	sei
-
-	
-	/*do_lcd_command 0b00000001 		; clear display
-    do_lcd_command 0b00000110 		; increment, no display shift
-    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
-	*/
-
 	rjmp main
 
 main:
-	mov temp, inStart
+	mov temp, inStart	; checks if in start screen
 	cpi temp, 0xFF
 	breq end
 
-	mov temp, inSelect
+	mov temp, inSelect	; check if in select screen
 	cpi temp, 0xFF
 	brne selectScreen
 
+	/*
 	do_lcd_command 0b00000001 		; clear display
     do_lcd_command 0b00000110 		; increment, no display shift
-    do_lcd_command 0b00001110 		; Cursor on, bar, no blink*/
-	//rjmp 
-	
+    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
+	*/
 	
 end:
-	rjmp init_loop
-
-selectScreen:
-
-	out PORTC, temp
-
-	rjmp selectScreen
-	
+	rjmp init_loop	
 
 EXT_INT2:
 
