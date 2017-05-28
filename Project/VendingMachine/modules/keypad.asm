@@ -25,7 +25,7 @@ delay:
     breq nextCol                ; all rows are high
     out PORTC, temp
 
-    start_to_select     ; if any button is pressed, change (if applicable) startScreen to selectScreen
+    rcall start_to_select     ; if any button is pressed, change (if applicable) startScreen to selectScreen
                
 
     ldi rmask, INITROWMASK      ;Initialize for row check
@@ -67,7 +67,8 @@ convert:
 
     mov row, temp      ; result is moved into row
     // now check 
-    rcall select_screen  ; result = inventory item id
+    set_reg inSelect
+    rjmp main
 
 zero:
     clr temp

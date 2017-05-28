@@ -1,22 +1,10 @@
-; COMP2121
-; Project - Vending Machine
-;	
-; Main
+.equ inStart =  1
+.equ inSelect = 2
+.equ inCoin = 3
+.equ inEmpty = 4
 
-.include "m2560def.inc"
-
-.include "modules/macros.asm"
-.include "modules/lcd.asm"
-.include "modules/timer0.asm"
-.include "modules/keypad.asm"
-
-.include "SelectScreen.asm"	
-.include "EmptyScreen.asm"			
-
-
-.def inStart = r5
-.def inSelect = r6
-.def inCoin = r7
+.def currFlag = r5
+.def oldFlag = r6
 
 .def row = r16
 .def col = r17
@@ -25,30 +13,36 @@
 .def temp = r20
 .def temp1 = r21
 
-; data memory
-.dseg 
-	TempCounter:
-    	.byte 2             ; Temporary counter. Counts milliseconds
-	DisplayCounter:
-    	.byte 2             ; counts number of milliseconds for displays.
-	Inventory:
-		.byte 9
-	Cost:
-		.byte 9	
+								;we have up to and including r25
 
-; program memory
+.dseg 
+TempCounter:
+    .byte 2             ; Temporary counter. Counts milliseconds
+DisplayCounter:
+    .byte 2             ; counts number of milliseconds for displays.
+Inventory:
+	.byte 9
+Cost:
+	.byte 9	
+
 .cseg
 .org 0x0000
    jmp RESET
    jmp DEFAULT          ; No handling for IRQ0.
    jmp DEFAULT          ; No handling for IRQ1.
-.org INT2addr
-    jmp EXT_INT2
 .org OVF0addr
    jmp Timer0OVF        ; Jump to the interrupt handler for timer 0
 
-DEFAULT:  
-	reti          ; no service
+
+jmp DEFAULT          ; default service for all other interrupts.
+DEFAULT:  reti          ; no service
+
+.include "m2560def.inc"
+.include "modules/macros.asm"
+.include "modules/lcd.asm"
+.include "modules/timer0.asm"
+.include "modules/keypad.asm"
+
 
 RESET: 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
@@ -84,7 +78,11 @@ RESET:
     do_lcd_command 0b00000110 		; increment, no display shift
     do_lcd_command 0b00001110 		; Cursor on, bar, no blink
 
-    ldi temp, 0b00000000	; timer setup
+	set_reg currFlag, inStart
+	clr oldFlag
+	clear DisplayCounter
+
+    ldi temp, 0b00000000
     out TCCR0A, temp
     ldi temp, 0b00000010
     out TCCR0B, temp        ; Prescaling value=8
@@ -93,66 +91,62 @@ RESET:
 	sei
 
 
-start:
-	set_reg inStart
-
-	do_lcd_data_i '2'
-	do_lcd_data_i '1'
-	do_lcd_data_i '2'
-	do_lcd_data_i '1'
-	do_lcd_data_i ' '
-	do_lcd_data_i '1'
-	do_lcd_data_i '7'
-	do_lcd_data_i 's'
-	do_lcd_data_i '1'
-	do_lcd_data_i ' '
-	do_lcd_data_i ' '
-	do_lcd_data_i ' '
-	do_lcd_data_i 'B'	
-	do_lcd_data_i '2'
-
-	do_lcd_command 0b11000000	; break to the next line	
-	do_lcd_data_i 'V'
-	do_lcd_data_i 'e'
-	do_lcd_data_i 'n'
-	do_lcd_data_i 'd'
-	do_lcd_data_i 'i'
-	do_lcd_data_i 'n'
-	do_lcd_data_i 'g'
-	do_lcd_data_i ' '
-	do_lcd_data_i 'M'
-	do_lcd_data_i 'a'
-	do_lcd_data_i 'c'
-	do_lcd_data_i 'h'	
-	do_lcd_data_i 'i'	
-	do_lcd_data_i 'n'
-	do_lcd_data_i 'e'
-
-	clear DisplayCounter
-
 	rjmp main
 
 main:
-	mov temp, inStart	; checks if in start screen
-	cpi temp, 0xFF
-	breq end
+	cp currFlag, oldFlag
+	breq end				; no screen update needed 
+	mov oldFlag, currFlag	; the screen needs updating
 
-	mov temp, inSelect	; check if in select screen
-	cpi temp, 0xFF
-	brne selectScreen
+	mov temp, currFlag
 
-	/*
-	do_lcd_command 0b00000001 		; clear display
-    do_lcd_command 0b00000110 		; increment, no display shift
-    do_lcd_command 0b00001110 		; Cursor on, bar, no blink
-	*/
+	cpi temp, inStart		; checking which screen to update to
+	brne checkSelect
+	rcall startScreen
+checkSelect:
+	cpi temp, inSelect
+	brne end
+	rcall selectScreen		; TODO tell Oscar to add stuff to it 
+checkEmpty:
+	cpi temp, inEmpty
+	rcall emptyScreen
+
+	
 	
 end:
-	rjmp init_loop	
+	rjmp init_loop
 
-EXT_INT2:
+start_to_select:
+    push temp
+    in temp, SREG
+    push temp
 
-		reti
+    mov temp, currFlag
+    cpi temp, inStart              ; checking whether the start screen is open
+    brne endF 
+                                ; not in start screen, so keep going
+    /*pop temp
+    out SREG, temp
+    pop temp*/
+
+    
+    set_reg currFlag, inSelect
+    //rjmp main            ; if it is, tell main to change to Select screen
+
+    endF:
+    pop temp
+    out SREG, temp
+    pop temp
+    ret 
+
+.include "modules/AdminScreen.asm"
+.include "modules/CoinReturn.asm"
+.include "modules/DeliverScreen.asm"
+.include "modules/EmptyScreen.asm"
+.include "modules/SelectScreen.asm"
+.include "modules/StartScreen.asm"
+
+	
 
 
 
