@@ -1,5 +1,4 @@
 
-// Send a command to the LCD (r16)
 
 .equ LCD_RS = 7
 .equ LCD_E = 6

@@ -3,10 +3,3 @@
 ;	
 ; Coin Screen
 ; - takes in coin
-
-
-.include "m2560def.inc"
-
-start:
-
-	rjmp start

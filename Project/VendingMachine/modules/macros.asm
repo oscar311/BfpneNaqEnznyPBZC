@@ -8,28 +8,6 @@
     st Y, temp
 .endmacro
 
-.macro start_to_select
-    push temp
-    in temp, SREG
-    push temp
-
-    mov temp, inStart
-    cpi temp, 0xFF                ; checking whether the start screen is open
-    brne end 
-                                ; not in start screen, so keep going
-    pop temp
-    out SREG, temp
-    pop temp
-
-    clr inStart
-    set_reg inSelect
-    rjmp main            ; if it is, tell main to change to Select screen
-
-    end:
-    pop temp
-    out SREG, temp
-    pop temp
-.endmacro   
 
 .macro do_lcd_command
     ldi r16, @0
@@ -122,7 +100,7 @@ Usage:
 
 .macro set_reg
     push temp
-    ser temp
+    ldi temp, @1
     mov @0, temp
     pop temp
 .endmacro
