@@ -47,7 +47,7 @@ Usage:
     ldi XH, high(@1)
 
     loop:
-    cpi @0, 0
+    cpi @0, 1
     breq getVal
     subi @0, 1
     adiw XL:XH, 1
@@ -81,7 +81,7 @@ Usage:
     ldi XH, high(@1)
 
     loop:
-    cpi @0, 0
+    cpi @0, 1
     breq setVal
     subi @0, 1
     adiw XL:XH, 1

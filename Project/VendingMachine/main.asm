@@ -6,6 +6,7 @@
 .def currFlag = r5
 .def oldFlag = r6
 .def keyPress = r7
+.def keyID = r8
 
 .def row = r16
 .def col = r17
@@ -46,6 +47,7 @@ DEFAULT:  reti          ; no service
 
 
 RESET: 
+
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
 	ldi temp1, low(RAMEND)
@@ -54,6 +56,8 @@ RESET:
 	sts DDRL, temp1				; sets lower bits as input and upper as output
 	ser temp1 					; set Port C as output - reset all bits to 0 (ser = set all bits in register)
 	out DDRC, temp1 
+
+	rcall testArray
 
     ldi temp, PORTLDIR
     sts DDRL, temp            		; sets lower bits as input and upper as output
@@ -83,6 +87,9 @@ RESET:
 	clr oldFlag
 	clear DisplayCounter
 
+	
+	//rjmp main
+
     ldi temp, 0b00000000
     out TCCR0A, temp
     ldi temp, 0b00000010
@@ -91,8 +98,8 @@ RESET:
     sts TIMSK0, temp        ; T/C0 interrupt enable
 	sei
 
+	//rcall initArrays
 
-	rjmp main
 
 main:
 
@@ -107,19 +114,23 @@ main:
 	mov oldFlag, currFlag	; update flags
 
 	mov temp, currFlag
+	out PORTC, currFlag
 
 	cpi temp, inStart		; checking which screen to update to
 	brne checkSelect
 	rcall startScreen
 checkSelect:
 	cpi temp, inSelect
-	brne end
+	brne checkEmpty
 	rcall selectScreen		; TODO tell Oscar to add stuff to it 
 checkEmpty:
 	cpi temp, inEmpty
-	brne end
+	brne checkCoin
 	rcall emptyScreen
-
+checkCoin:
+	cpi temp, inCoin
+	brne end
+	rcall coinScreen
 	
 	
 end:
@@ -136,7 +147,7 @@ start_to_select:
                                 ; not in start screen, so keep going
     
     set_reg currFlag, inSelect
-   clr keyPress					; ignore this key press
+	clr_reg keyPress					; ignore this key press
 
     endF:
     pop temp
@@ -146,15 +157,101 @@ start_to_select:
 
 .include "modules/AdminScreen.asm"
 .include "modules/CoinReturn.asm"
+.include "modules/CoinScreen.asm"
 .include "modules/DeliverScreen.asm"
 .include "modules/EmptyScreen.asm"
 .include "modules/SelectScreen.asm"
 .include "modules/StartScreen.asm"
 
+testArray:
+	ldi r24, 1
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 2
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 3
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 4
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 5
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 6
+    ldi temp1, 0
+    set_element r24,Inventory, temp1
+	ldi r24, 7
+    ldi temp1, 7
+    set_element r24,Inventory, temp1
+	ldi r24, 8
+    ldi temp1, 8
+    set_element r24,Inventory, temp1
+	ldi r24, 9
+    ldi temp1, 9
+    set_element r24,Inventory, temp1
+	ret
+
+initArrays:
+	push temp
+	in temp, SREG
+	push temp
+	push temp1
 	
+	ldi temp1, 1
+
+	loop:
+	cpi temp1, 10
+	breq endLoop
+	set_element temp1 ,Inventory, temp1
+	rcall odd_or_even
+	set_element temp1 ,Cost, temp
+	inc temp1
+	rjmp loop
+
+	endLoop:
+	pop temp1
+	pop temp
+	out SREG, temp
+	pop temp
+	ret
 
 
+odd_or_even:
+    push temp1
+    in temp, SREG
+    push temp
 
+    /*
+        9 ->       1 0 0 1
+        1 ->     & 0 0 0 1
+                   -------
+                   0 0 0 1
+
+        14 ->      1 1 1 0
+        1 ->     & 0 0 0 1
+                   -------
+                   0 0 0 0          
+    */
+                
+    andi temp1, 1                   
+    cpi temp1, 0
+    breq even
+    cpi temp1, 1
+    breq odd
+
+    even:
+        ldi temp, 2
+        rjmp endOop
+    odd: 
+        ldi temp, 1
+
+	endOop:
+    pop temp
+    out SREG, temp
+    pop temp1
+	ret
 
 
 

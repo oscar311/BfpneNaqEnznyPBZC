@@ -7,6 +7,7 @@ selectScreen:
 	push temp
 	in temp, SREG
 	push temp
+  push temp1
 
   do_lcd_command 0b00000001 		; clear display
   do_lcd_command 0b00000110 		; increment, no display shift
@@ -30,13 +31,90 @@ selectScreen:
   mov temp1, keyPress
   cpi temp1, 0xFF
   brne EndSelect
-  get_element r24,Inventory, temp1
 
-  ldi temp1, 0xFF
-  out PORTC, temp1
+  clr keyPress
+  mov r16, keyID
+  get_element r16, Inventory, temp1
 
-  	EndSelect:
-  	pop temp
-  	out SREG, temp
-  	pop temp
+  out PORTC,  temp1
+  //rcall belay
+
+  cpi temp1, 0
+  breq empty 
+  set_reg currFlag, inCoin
+  jmp EndSelect
+
+  empty:
+    set_reg currFlag, inEmpty
+
+
+	EndSelect:
+  pop temp1
+	pop temp
+	out SREG, temp
+	pop temp
 	ret
+
+
+belay:
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+    rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+    rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+    rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+    rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+    rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  rcall debounce_sleep
+  ret

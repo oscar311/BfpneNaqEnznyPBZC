@@ -27,8 +27,7 @@ delay:
     breq nextCol                ; all rows are high
     //out PORTC, temp 
 
-    set_reg keyPress, 0xFF
-    rcall start_to_select
+
 
 
                                 ; if any button is pressed, change (if applicable) startScreen to selectScreen
@@ -51,7 +50,9 @@ nextCol:
     inc col                     
     jmp colloop                 ; in no button pressed jump back to start
 
-convert:
+convert:   
+    set_reg keyPress, 0xFF
+    rcall start_to_select
     cpi col, 3              
     breq letters                ; if one of the letters have been pressed
     cpi row, 3
@@ -67,11 +68,9 @@ convert:
     add temp, row               ; multiply 3
     add temp, col
     subi temp, -1               ; temp now contains the actual number
-
+    rcall debounce_sleep 
     //set_reg keypadPressed, 0xFF
-    mov row, temp
-    ldi temp, 0b10101111                            ; not in start screen, so keep going
-    out PORTC, temp
+    mov keyID, temp
     //rjmp main
     
 
@@ -106,7 +105,7 @@ write_out:
 
 debounce_sleep:
     push temp1
-    ldi temp1, 40               ; debounce for 200ms
+    ldi temp1, 50               ; debounce for 200ms
     startDebounce:
     rcall sleep_5ms
     dec temp1
