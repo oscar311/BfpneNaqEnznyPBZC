@@ -5,6 +5,7 @@
 
 .def currFlag = r5
 .def oldFlag = r6
+.def keyPress = r7
 
 .def row = r16
 .def col = r17
@@ -94,9 +95,16 @@ RESET:
 	rjmp main
 
 main:
+
 	cp currFlag, oldFlag
-	breq end				; no screen update needed 
-	mov oldFlag, currFlag	; the screen needs updating
+	brne update				; screen update needed 
+	
+	ldi temp, 0xFF
+	cp keyPress, temp
+	brne end				; if key not pressed no update needed 
+							; else if is pressed then one of the screens might need updating
+	update:
+	mov oldFlag, currFlag	; update flags
 
 	mov temp, currFlag
 
@@ -109,6 +117,7 @@ checkSelect:
 	rcall selectScreen		; TODO tell Oscar to add stuff to it 
 checkEmpty:
 	cpi temp, inEmpty
+	brne end
 	rcall emptyScreen
 
 	
@@ -125,13 +134,9 @@ start_to_select:
     cpi temp, inStart              ; checking whether the start screen is open
     brne endF 
                                 ; not in start screen, so keep going
-    /*pop temp
-    out SREG, temp
-    pop temp*/
-
     
     set_reg currFlag, inSelect
-    //rjmp main            ; if it is, tell main to change to Select screen
+   clr keyPress					; ignore this key press
 
     endF:
     pop temp
@@ -147,6 +152,7 @@ start_to_select:
 .include "modules/StartScreen.asm"
 
 	
+
 
 
 

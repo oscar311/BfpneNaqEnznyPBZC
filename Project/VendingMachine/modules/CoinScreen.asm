@@ -3,3 +3,6 @@
 ;	
 ; Coin Screen
 ; - takes in coin
+coinScreen:
+
+ret
