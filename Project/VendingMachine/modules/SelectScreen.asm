@@ -36,7 +36,7 @@ selectScreen:
   mov r16, keyID
   get_element r16, Inventory, temp1
 
-  out PORTC,  temp1
+  out PORTC, temp1
   //rcall belay
 
   cpi temp1, 0
