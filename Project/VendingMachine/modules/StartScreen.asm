@@ -39,4 +39,5 @@ startScreen:
 	do_lcd_data_i 'i'	
 	do_lcd_data_i 'n'
 	do_lcd_data_i 'e'
+	do_lcd_data_i ' '
 	ret

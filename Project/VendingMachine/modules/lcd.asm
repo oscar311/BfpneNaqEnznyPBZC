@@ -70,6 +70,8 @@ sleep_5ms:
     rcall sleep_1ms
     ret
 
+/*
+*/
 print_digits:
     push temp
     in temp, SREG
@@ -80,7 +82,7 @@ print_digits:
 
     tens:                       ; likewise for tens and ones....
     ldi temp, 10
-    cp  r16, temp
+    cpi  r16, 10
     brlo tens_print
     sub  r16, temp
     inc temp1
