@@ -69,7 +69,7 @@ convert:
     add temp, col
     subi temp, -1               ; temp now contains the actual number
     rcall debounce_sleep 
-    //set_reg keypadPressed, 0xFF
+    //set_reg keyPress, 0xFF
     mov keyID, temp
     //rjmp main
     

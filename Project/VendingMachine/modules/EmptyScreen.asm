@@ -23,7 +23,15 @@ emptyScreen:
 	do_lcd_data_i 'k'   
 	do_lcd_data_i ' ' 
 
-  	do_lcd_command 0b11000000  ; break to the next line   
-  	rcall 	print_digits ; row = item id 
+  	do_lcd_command 0b11000000  		; break to the next line   
+  	mov r16, keyID
+  	rcall 	print_digits 			; //function to print r16 
+
+  	set_reg ledVal, 0xFF			; turn on LEDS (need to set the top 2 LEDS as well)
+  	out PORTC, ledVal
+  	out PORTG, ledVal
+
+  	clear displayCounter			; start change display timer 
+  	clear LEDCounter 				; start LED change timer
   	
 	ret

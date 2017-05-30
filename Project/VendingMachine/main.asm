@@ -7,6 +7,7 @@
 .def oldFlag = r6
 .def keyPress = r7
 .def keyID = r8
+.def ledVal = r9
 
 .def row = r16
 .def col = r17
@@ -18,7 +19,7 @@
 								;we have up to and including r25
 
 .dseg 
-TempCounter:
+LEDCounter:
     .byte 2             ; Temporary counter. Counts milliseconds
 DisplayCounter:
     .byte 2             ; counts number of milliseconds for displays.
@@ -47,6 +48,8 @@ DEFAULT:  reti          ; no service
 
 
 RESET: 
+	
+
 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
@@ -54,8 +57,13 @@ RESET:
 	out SPL, temp1
 	ldi temp1, PORTLDIR
 	sts DDRL, temp1				; sets lower bits as input and upper as output
-	ser temp1 					; set Port C as output - reset all bits to 0 (ser = set all bits in register)
+
+	rcall InitArrays				; initializes the Cost & Inventory arrays with appropriate values
+
+	ser temp1 					; set Port C,G & D as output - reset all bits to 0 (ser = set all bits in register)
 	out DDRC, temp1 
+	out DDRG, temp1 
+	out DDRD, temp1 
 
 	rcall testArray
 
@@ -86,9 +94,6 @@ RESET:
 	set_reg currFlag, inStart
 	clr oldFlag
 	clear DisplayCounter
-
-	
-	//rjmp main
 
     ldi temp, 0b00000000
     out TCCR0A, temp
@@ -148,6 +153,20 @@ start_to_select:
     
     set_reg currFlag, inSelect
 	clr_reg keyPress					; ignore this key press
+	rjmp endF
+
+empty_to_select:
+    push temp
+    in temp, SREG
+    push temp
+
+    mov temp, currFlag
+    cpi temp, inEmpty              ; checking whether the empty screen is open
+    brne endF 
+									; not in empty screen, so keep going
+    
+    set_reg currFlag, inSelect
+	clr_reg keyPress					; ignore this key press
 
     endF:
     pop temp
@@ -204,7 +223,8 @@ initArrays:
 	loop:
 	cpi temp1, 10
 	breq endLoop
-	set_element temp1 ,Inventory, temp1
+	mov r16, temp1
+	set_element temp1 ,Inventory, r16
 	rcall odd_or_even
 	set_element temp1 ,Cost, temp
 	inc temp1
@@ -221,7 +241,7 @@ initArrays:
 odd_or_even:
     push temp1
     in temp, SREG
-    push temp
+    //push temp
 
     /*
         9 ->       1 0 0 1
@@ -248,7 +268,7 @@ odd_or_even:
         ldi temp, 1
 
 	endOop:
-    pop temp
+    //pop temp
     out SREG, temp
     pop temp1
 	ret
