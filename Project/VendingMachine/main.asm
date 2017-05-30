@@ -2,6 +2,7 @@
 .equ inSelect = 2
 .equ inCoin = 3
 .equ inEmpty = 4
+.equ inDeliver = 5
 
 .def currFlag = r5
 .def oldFlag = r6
@@ -48,8 +49,6 @@ DEFAULT:  reti          ; no service
 
 
 RESET: 
-	
-
 
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
@@ -64,8 +63,6 @@ RESET:
 	out DDRC, temp1 
 	out DDRG, temp1 
 	out DDRD, temp1 
-
-	rcall testArray
 
     ldi temp, PORTLDIR
     sts DDRL, temp            		; sets lower bits as input and upper as output
@@ -136,7 +133,11 @@ checkCoin:
 	cpi temp, inCoin
 	brne end
 	rcall coinScreen
-	
+
+checkDeliver:				; !!!  untested - deliver screen  !!!
+	cpi temp, inDeliver
+	brne end
+	rcall deliverScreen
 	
 end:
 	rjmp init_loop
@@ -173,6 +174,28 @@ empty_to_select:
     out SREG, temp
     pop temp
     ret 
+
+
+deliver_to_select:
+	push temp
+    in temp, SREG
+    push temp
+
+    mov temp, currFlag
+    cpi temp, inDeliver		; checks whether in deliver screen
+    brne endF 
+									
+    set_reg currFlag, inSelect	; change screens
+	    
+    mov temp, 0
+    out PORTE, temp 		; turn off moter 
+
+    endF:
+    pop temp
+    out SREG, temp
+    pop temp
+    ret 
+
 
 .include "modules/AdminScreen.asm"
 .include "modules/CoinReturn.asm"
