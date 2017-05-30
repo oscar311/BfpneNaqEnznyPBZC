@@ -13,26 +13,54 @@ Timer0OVF: ; interrupt subroutine to Timer0
     push r27
     
     ;counting 3 seconds until the Start screen can be cleared
-    lds r26, DisplayCounter
-    lds r27, DisplayCounter+1
-    adiw r27:r26, 1
-    
-    
-    
-    cpi r26, low(3000*INTS_PER_MS)        ; 3 second check
-	ldi temp, high(3000*INTS_PER_MS) 
-    cpc r27, temp
-    brne skip
-    
-    
-    //clear DisplayCounter
-    rcall start_to_select
-    rjmp EndIF
+        lds r26, DisplayCounter
+        lds r27, DisplayCounter+1
+        adiw r27:r26, 1
+        
 
-skip:
+        cpi r26, low(3000*INTS_PER_MS)        ; 3 second check
+    	ldi temp, high(3000*INTS_PER_MS) 
+        cpc r27, temp
+        brne skipDisplay
+        
+        rcall start_to_select                   ; if the start screen needs to be changed
+        rcall empty_to_select                   ; if the empty screen needs to be changed
+        // UNTESTED!!!!!!!!!!!!!!!!!
+        clear DisplayCounter 
+        rjmp EndIF
 
-    sts DisplayCounter, r26
-    sts DisplayCounter +1, r27
+        skipDisplay:
+
+        sts DisplayCounter, r26
+        sts DisplayCounter +1, r27
+
+
+    ;counting 1.5 seconds  to turn off the 10 LEDs
+        lds r26, LEDCounter
+        lds r27, LEDCounter+1
+        adiw r27:r26, 1
+        
+        ldi temp, inEmpty
+        cp currFlag, temp
+        brne skipLED                          ; if not in EmptyScreen then no need to consider this
+
+        cpi r26, low(1500*INTS_PER_MS)        ; 1.5 second check
+        ldi temp, high(1500*INTS_PER_MS) 
+        cpc r27, temp
+        brne skipLED
+        
+        clear LEDCounter 
+
+        com ledVal                            ; invert to set all bits to zero hence turn LED off (need to set the top 2 LEDS as well)
+        out PORTC, ledVal
+        out PORTG, ledVal
+
+        rjmp EndIF
+
+        skipLED:
+
+        sts LEDCounter, r26
+        sts LEDCounter +1, r27
 
 
 
