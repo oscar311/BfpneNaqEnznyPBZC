@@ -2,13 +2,34 @@
 .equ inSelect = 2
 .equ inCoin = 3
 .equ inEmpty = 4
-.equ inDeliver = 5
+.equ ADCCoin = 6
+.equ inReturn = 5
+.equ inDeliver = 7
+.equ inAdmin = 8
 
-.def currFlag = r5
-.def oldFlag = r6
-.def keyPress = r7
-.def keyID = r8
-.def ledVal = r9
+.equ aKey = 20
+.equ bKey = 21
+.equ cKey = 22
+.equ dKey = 23
+.equ asterix = 24
+.equ hash = 25
+.equ zeroButton = 26
+
+.equ turnLEDOff = 0b11010000
+.equ turnLEDOn =  0b00101111
+.equ turnMotOn = 0b11010000
+
+.def currFlag = r4
+.def oldFlag = r5
+.def keyPress = r6
+.def keyID = r7
+.def potPos = r8
+.def coinsToReturn = r9 
+.def coinsEntered = r10	
+.def coinsRequired = r11
+.def keyDebounce = r12
+.def currItem = r13
+.def asterixPressed = r14
 
 .def row = r16
 .def col = r17
@@ -16,6 +37,8 @@
 .def cmask = r19                ; mask for column
 .def temp = r20
 .def temp1 = r21
+.def ADCLow = r22
+.def ADCHigh = r23
 
 								;we have up to and including r25
 
@@ -24,18 +47,31 @@ LEDCounter:
     .byte 2             ; Temporary counter. Counts milliseconds
 DisplayCounter:
     .byte 2             ; counts number of milliseconds for displays.
+ReturnCounter:
+	.byte 2
+AsterixCounter:
+	.byte 2
+SoundCounter:
+	.byte 2
+ADCCounter:
+	.byte 2
 Inventory:
 	.byte 9
 Cost:
 	.byte 9	
 
+
 .cseg
 .org 0x0000
    jmp RESET
-   jmp DEFAULT          ; No handling for IRQ0.
-   jmp DEFAULT          ; No handling for IRQ1.
+.org INT0addr
+	jmp EXT_INT0		
+.org INT1addr
+   jmp EXT_INT1
 .org OVF0addr
    jmp Timer0OVF        ; Jump to the interrupt handler for timer 0
+.org ADCCaddr
+	jmp EXT_POT
 
 
 jmp DEFAULT          ; default service for all other interrupts.
@@ -49,20 +85,25 @@ DEFAULT:  reti          ; no service
 
 
 RESET: 
-
 	ldi temp1, high(RAMEND) 		; Initialize stack pointer
 	out SPH, temp1
 	ldi temp1, low(RAMEND)
 	out SPL, temp1
 	ldi temp1, PORTLDIR
-	sts DDRL, temp1				; sets lower bits as input and upper as output
+	sts DDRL, temp1					; sets lower bits as input and upper as output
 
 	rcall InitArrays				; initializes the Cost & Inventory arrays with appropriate values
 
-	ser temp1 					; set Port C,G & D as output - reset all bits to 0 (ser = set all bits in register)
+
+
+	ser temp1 						; set Port C,B & D as output - reset all bits to 0 (ser = set all bits in register)
 	out DDRC, temp1 
-	out DDRG, temp1 
-	out DDRD, temp1 
+	out DDRE, temp1
+	out DDRB, temp1
+	out DDRG, temp1
+
+	ser temp1
+	out PORTG, temp1
 
     ldi temp, PORTLDIR
     sts DDRL, temp            		; sets lower bits as input and upper as output
@@ -76,6 +117,12 @@ RESET:
 
 	ser temp 						; set Port C as output - reset all bits to 0 (ser = set all bits in register)
 	out DDRC, temp 
+
+	clr temp
+	out DDRD, temp					; set PORTD (external interrupts) as input
+
+	ldi temp, (1 << INT0) | (1 << INT1)
+	out EIMSK, temp
 
     do_lcd_command 0b00111000 		; 2x5x7 (2 lines, 5x7 is the font)
     rcall sleep_5ms
@@ -91,6 +138,8 @@ RESET:
 	set_reg currFlag, inStart
 	clr oldFlag
 	clear DisplayCounter
+	clear SoundCounter
+	clr asterixPressed
 
     ldi temp, 0b00000000
     out TCCR0A, temp
@@ -98,13 +147,29 @@ RESET:
     out TCCR0B, temp        ; Prescaling value=8
     ldi temp, 1<<TOIE0      ; = 128 microseconds
     sts TIMSK0, temp        ; T/C0 interrupt enable
+
+	clr coinsToReturn
+
+	// REFS0: sets up voltage reference, 0b01 provides the reference with the best range
+	// setting ADLAR to 1 left aligns the 10 output bits within the 16 bit output register
+	// MUX0 to MUX5 choose the input pin/mode/gain. 0b10000 chooses PK8 on the board
+	// ADIE enables the ADC interrupt, which interrupts when a conversion is finished
+	// ADPS0 chooses the ADC clock divider. 0b111 uses a 128 divider to get a 125 kHz ADC
+	//      clock which is within the recommended range of 50 - 200 kHz
+	ldi temp, (0b01 << REFS0) | (0 << ADLAR) | (0 << MUX0)
+	sts ADMUX, temp
+
+	ldi temp, (1 << MUX5)
+	sts ADCSRB, temp
+
+	ldi temp, (1 << ADEN) | (1 << ADIE) | (0b111 << ADPS0) 
+	sts ADCSRA, temp
+
 	sei
 
-	//rcall initArrays
 
 
 main:
-
 	cp currFlag, oldFlag
 	brne update				; screen update needed 
 	
@@ -116,31 +181,60 @@ main:
 	mov oldFlag, currFlag	; update flags
 
 	mov temp, currFlag
-	out PORTC, currFlag
-
+	
 	cpi temp, inStart		; checking which screen to update to
-	brne checkSelect
+	brne checkAdmin
 	rcall startScreen
+checkAdmin:
+	cpi temp, inAdmin		; checking which screen to update to
+	brne checkSelect
+	rcall adminScreen
 checkSelect:
 	cpi temp, inSelect
 	brne checkEmpty
-	rcall selectScreen		; TODO tell Oscar to add stuff to it 
+	rcall selectScreen		
 checkEmpty:
 	cpi temp, inEmpty
 	brne checkCoin
 	rcall emptyScreen
 checkCoin:
 	cpi temp, inCoin
-	brne end
+	brne checkReturn
 	rcall coinScreen
-
-checkDeliver:				; !!!  untested - deliver screen  !!!
+checkReturn:
+	cpi temp, inReturn
+	brne checkDeliver
+	rcall returnScreen
+checkDeliver:
 	cpi temp, inDeliver
 	brne end
 	rcall deliverScreen
 	
 end:
 	rjmp init_loop
+
+	
+checkCoins:
+    push temp
+    in temp, SREG
+    push temp
+
+	ldi temp, ADCCoin
+	cp currFlag, temp
+	brne endFunction
+
+	clr temp
+	cp coinsEntered, temp
+	brne retCoin
+
+	set_reg currFlag, inSelect			; no coins have been entered
+	rjmp endF
+
+	retCoin:							; coins have been entered
+	set_reg currFlag, inReturn
+
+	endFunction:
+	rjmp endF	
 
 start_to_select:
     push temp
@@ -149,7 +243,7 @@ start_to_select:
 
     mov temp, currFlag
     cpi temp, inStart              ; checking whether the start screen is open
-    brne endF 
+    brne endFunction
                                 ; not in start screen, so keep going
     
     set_reg currFlag, inSelect
@@ -165,37 +259,60 @@ empty_to_select:
     cpi temp, inEmpty              ; checking whether the empty screen is open
     brne endF 
 									; not in empty screen, so keep going
+	clr temp
+	out PORTC, temp                     
+	out PORTE, temp
     
     set_reg currFlag, inSelect
 	clr_reg keyPress					; ignore this key press
+	rjmp endF
 
-    endF:
-    pop temp
-    out SREG, temp
-    pop temp
-    ret 
+select_to_admin:
+    push temp
+    in temp, SREG
+    push temp
+	push r26
+	push r27
 
+    mov temp, oldFlag
+    cpi temp, inSelect              ; checking whether the empty screen is open
+    brne endF 
+
+	lds r26, AsterixCounter
+    lds r27, AsterixCounter+1
+
+	cpi r26, low(5000*INTS_PER_MS)        
+    ldi temp, high(5000*INTS_PER_MS) 
+    cpc r27, temp
+
+	pop r27
+	pop r26
+
+	brne endF						; button not held down for 5 seconds yet
+
+									; not in empty screen, so keep going    
+    set_reg currFlag, inAdmin
+	clr_reg keyPress					; ignore this key press
+	rjmp endF
 
 deliver_to_select:
 	push temp
     in temp, SREG
-    push temp
+	push temp
 
-    mov temp, currFlag
-    cpi temp, inDeliver		; checks whether in deliver screen
+	mov temp, currFlag
+    cpi temp, inDeliver              ; checking whether the empty screen is open
     brne endF 
-									
-    set_reg currFlag, inSelect	; change screens
-	    
-    mov temp, 0
-    out PORTE, temp 		; turn off moter 
+
+    set_reg currFlag, inSelect
+	ldi temp, 0
+	out PORTE, temp     ; turn off moter 
 
     endF:
     pop temp
     out SREG, temp
     pop temp
     ret 
-
 
 .include "modules/AdminScreen.asm"
 .include "modules/CoinReturn.asm"
@@ -204,36 +321,6 @@ deliver_to_select:
 .include "modules/EmptyScreen.asm"
 .include "modules/SelectScreen.asm"
 .include "modules/StartScreen.asm"
-
-testArray:
-	ldi r24, 1
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 2
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 3
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 4
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 5
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 6
-    ldi temp1, 0
-    set_element r24,Inventory, temp1
-	ldi r24, 7
-    ldi temp1, 7
-    set_element r24,Inventory, temp1
-	ldi r24, 8
-    ldi temp1, 8
-    set_element r24,Inventory, temp1
-	ldi r24, 9
-    ldi temp1, 9
-    set_element r24,Inventory, temp1
-	ret
 
 initArrays:
 	push temp
@@ -249,7 +336,7 @@ initArrays:
 	mov r16, temp1
 	set_element temp1 ,Inventory, r16
 	rcall odd_or_even
-	set_element temp1 ,Cost, temp
+	set_element temp1 ,Cost, r16
 	inc temp1
 	rjmp loop
 
@@ -263,9 +350,9 @@ initArrays:
 
 odd_or_even:
     push temp1
+	push temp
     in temp, SREG
-    //push temp
-
+	push temp
     /*
         9 ->       1 0 0 1
         1 ->     & 0 0 0 1
@@ -285,21 +372,56 @@ odd_or_even:
     breq odd
 
     even:
-        ldi temp, 2
+        ldi r16, 2
         rjmp endOop
     odd: 
-        ldi temp, 1
+        ldi r16, 1
 
 	endOop:
-    //pop temp
+	pop temp
     out SREG, temp
+	pop temp
     pop temp1
 	ret
 
+EXT_POT:
+	push temp
+	in temp, SREG
+	push temp
 
+	lds ADCLow, ADCL
+    lds ADCHigh, ADCH
 
+	pop temp
+	out SREG, temp
+	pop temp
 
+	reti
 
+EXT_INT0:
+	push temp
+	in temp, SREG
+	push temp
 
+	rcall empty_to_select					; to abort the empty screen if needed
+	rcall adminAddItem						; to add an item if in Admin mode
+	rcall debounce_sleep
 
+	pop temp
+	out SREG, temp
+	pop temp
+	reti
 
+EXT_INT1:
+	push temp
+	in temp, SREG
+	push temp
+
+	rcall empty_to_select					; to abort the empty screen if needed
+	rcall adminRemoveItem					; to remove an item if in Admin mode
+	rcall debounce_sleep
+
+	pop temp
+	out SREG, temp
+	pop temp
+	reti

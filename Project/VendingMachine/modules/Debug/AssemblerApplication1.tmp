@@ -1,0 +1,170 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.6</VERSION>
+ <DEVICE>"ATmega2560"</DEVICE>
+ <WORKING_DIR>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\avrasm\inc\m2560def.inc</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/macros.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinReturn.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/DeliverScreen.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/EmptyScreen.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/SelectScreen.asm</FILE>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/StartScreen.asm</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\Debug\AssemblerApplication1.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>AssemblerApplication1.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>AssemblerApplication1.map</FILE>
+  <FILE>AssemblerApplication1.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <LEDCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>46</LINE></LEDCounter>
+  <DisplayCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>48</LINE></DisplayCounter>
+  <ReturnCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>50</LINE></ReturnCounter>
+  <AsterixCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>52</LINE></AsterixCounter>
+  <SoundCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>54</LINE></SoundCounter>
+  <ADCCounter><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>56</LINE></ADCCounter>
+  <Inventory><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>58</LINE></Inventory>
+  <Cost><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>60</LINE></Cost>
+  <RESET><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>87</LINE></RESET>
+  <EXT_INT0><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>401</LINE></EXT_INT0>
+  <EXT_INT1><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>415</LINE></EXT_INT1>
+  <Timer0OVF><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>22</LINE></Timer0OVF>
+  <EXT_POT><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>387</LINE></EXT_POT>
+  <DEFAULT><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>78</LINE></DEFAULT>
+  <lcd_command><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>8</LINE></lcd_command>
+  <sleep_1ms><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>53</LINE></sleep_1ms>
+  <lcd_data><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>17</LINE></lcd_data>
+  <lcd_wait><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>28</LINE></lcd_wait>
+  <lcd_wait_loop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>35</LINE></lcd_wait_loop>
+  <delayloop_1ms><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>58</LINE></delayloop_1ms>
+  <sleep_5ms><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>65</LINE></sleep_5ms>
+  <print_digits><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>75</LINE></print_digits>
+  <hundreds><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>83</LINE></hundreds>
+  <hundred_print><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>91</LINE></hundred_print>
+  <print><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>123</LINE></print>
+  <tens><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>94</LINE></tens>
+  <tens_print><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>102</LINE></tens_print>
+  <ones><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>105</LINE></ones>
+  <ones_print><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/lcd.asm</FILE><LINE>113</LINE></ones_print>
+  <noAsterix><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>49</LINE></noAsterix>
+  <skipADC><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>80</LINE></skipADC>
+  <finishADC><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>76</LINE></finishADC>
+  <skipDisplay><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>102</LINE></skipDisplay>
+  <start_to_select><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>239</LINE></start_to_select>
+  <empty_to_select><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>253</LINE></empty_to_select>
+  <deliver_to_select><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>298</LINE></deliver_to_select>
+  <EndIF><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>191</LINE></EndIF>
+  <flash><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>123</LINE></flash>
+  <skipLED><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>144</LINE></skipLED>
+  <skipOff><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>170</LINE></skipOff>
+  <skipOn><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/timer0.asm</FILE><LINE>185</LINE></skipOn>
+  <init_loop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>6</LINE></init_loop>
+  <startLoop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>18</LINE></startLoop>
+  <endKeypad><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>177</LINE></endKeypad>
+  <colloop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>23</LINE></colloop>
+  <cont><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>27</LINE></cont>
+  <delay><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>32</LINE></delay>
+  <nextCol><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>58</LINE></nextCol>
+  <rowLoop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>48</LINE></rowLoop>
+  <convert><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>63</LINE></convert>
+  <letters><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>103</LINE></letters>
+  <isNumber><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>77</LINE></isNumber>
+  <admin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>137</LINE></admin>
+  <zero><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>91</LINE></zero>
+  <exit><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>96</LINE></exit>
+  <debounce_sleep><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>165</LINE></debounce_sleep>
+  <updateAdminItem><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>69</LINE></updateAdminItem>
+  <checkCoins><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>217</LINE></checkCoins>
+  <exitAdmin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>109</LINE></exitAdmin>
+  <aButton><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>114</LINE></aButton>
+  <bButton><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>120</LINE></bButton>
+  <cButton><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>126</LINE></cButton>
+  <dButton><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>132</LINE></dButton>
+  <adminIncCost><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>192</LINE></adminIncCost>
+  <adminDecCost><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>222</LINE></adminDecCost>
+  <resetNumItems><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>252</LINE></resetNumItems>
+  <asterixDone><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>160</LINE></asterixDone>
+  <alreadyPressed><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>148</LINE></alreadyPressed>
+  <select_to_admin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>270</LINE></select_to_admin>
+  <startDebounce><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>168</LINE></startDebounce>
+  <coinCountCheck><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>189</LINE></coinCountCheck>
+  <main><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>172</LINE></main>
+  <toMain><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/keypad.asm</FILE><LINE>202</LINE></toMain>
+  <coinCount><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>57</LINE></coinCount>
+  <InitArrays><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>325</LINE></InitArrays>
+  <update><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>180</LINE></update>
+  <end><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>213</LINE></end>
+  <checkAdmin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>188</LINE></checkAdmin>
+  <startScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/StartScreen.asm</FILE><LINE>13</LINE></startScreen>
+  <checkSelect><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>192</LINE></checkSelect>
+  <adminScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>6</LINE></adminScreen>
+  <checkEmpty><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>196</LINE></checkEmpty>
+  <selectScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/SelectScreen.asm</FILE><LINE>13</LINE></selectScreen>
+  <checkCoin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>200</LINE></checkCoin>
+  <emptyScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/EmptyScreen.asm</FILE><LINE>12</LINE></emptyScreen>
+  <checkReturn><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>204</LINE></checkReturn>
+  <coinScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>38</LINE></coinScreen>
+  <checkDeliver><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>208</LINE></checkDeliver>
+  <returnScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinReturn.asm</FILE><LINE>12</LINE></returnScreen>
+  <deliverScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/DeliverScreen.asm</FILE><LINE>13</LINE></deliverScreen>
+  <endFunction><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>236</LINE></endFunction>
+  <retCoin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>233</LINE></retCoin>
+  <endF><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>311</LINE></endF>
+  <notDefault><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>23</LINE></notDefault>
+  <defaultItem><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>19</LINE></defaultItem>
+  <loop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>333</LINE></loop>
+  <addSpaces><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>87</LINE></addSpaces>
+  <AdminUpdateLEDs><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>277</LINE></AdminUpdateLEDs>
+  <noUpdate><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>80</LINE></noUpdate>
+  <noAdminExit><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>125</LINE></noAdminExit>
+  <adminRemoveItem><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>132</LINE></adminRemoveItem>
+  <endRemove><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>154</LINE></endRemove>
+  <adminAddItem><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>162</LINE></adminAddItem>
+  <endAdd><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>184</LINE></endAdd>
+  <endIncCost><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>214</LINE></endIncCost>
+  <endDecCost><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>244</LINE></endDecCost>
+  <endReset><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>269</LINE></endReset>
+  <AdminLEDloop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>291</LINE></AdminLEDloop>
+  <LEDFinish><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>299</LINE></LEDFinish>
+  <noOtherLights><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>318</LINE></noOtherLights>
+  <oneLight><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>310</LINE></oneLight>
+  <twoLights><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>314</LINE></twoLights>
+  <printLights><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>321</LINE></printLights>
+  <endLEDUpdate><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/AdminScreen.asm</FILE><LINE>324</LINE></endLEDUpdate>
+  <printCoinScreen><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>108</LINE></printCoinScreen>
+  <highSet><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>94</LINE></highSet>
+  <lowSet><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>71</LINE></lowSet>
+  <noCoin><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>89</LINE></noCoin>
+  <updateLEDs><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>148</LINE></updateLEDs>
+  <notDone><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>86</LINE></notDone>
+  <removeItem><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>137</LINE></removeItem>
+  <ignore><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>103</LINE></ignore>
+  <LEDloop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>158</LINE></LEDloop>
+  <updateFinish><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/CoinScreen.asm</FILE><LINE>167</LINE></updateFinish>
+  <EndDeliver><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/DeliverScreen.asm</FILE><LINE>45</LINE></EndDeliver>
+  <EndSelect><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/SelectScreen.asm</FILE><LINE>62</LINE></EndSelect>
+  <empty><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/SelectScreen.asm</FILE><LINE>58</LINE></empty>
+  <belay><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\modules/SelectScreen.asm</FILE><LINE>70</LINE></belay>
+  <endLoop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>343</LINE></endLoop>
+  <odd_or_even><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>351</LINE></odd_or_even>
+  <even><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>374</LINE></even>
+  <odd><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>377</LINE></odd>
+  <endOop><FILE>C:\Users\Ramal\Uni Work\COMP2121\Project\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>380</LINE></endOop>
+ </LABELS>
+</ASSEMBLER_INFO>
